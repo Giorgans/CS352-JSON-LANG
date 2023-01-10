@@ -1,7 +1,3 @@
-//
-// Created by Georgios Zervos on 7/1/23.
-//
-
 #ifndef CS352_JSONLANG_H
 #define CS352_JSONLANG_H
 
