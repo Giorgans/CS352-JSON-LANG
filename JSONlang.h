@@ -5,20 +5,21 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <memory>
+#include <array>
 #include <map>
-bool isObject = false;
+
 #define PROGRAM_BEGIN ;int main(){
 #define PROGRAM_END ;return 0;}
 
+// Var definition
 #define JSON(name) ;auto name
 
 // Object definitions
 #define STRING(text) Object(STRING,text)
 #define NUMBER(x)    Object(getNumberType(x),std::to_string(x))
 #define OBJECT std::vector <Object>
-#define KEY(name) STRING(name) , (false) ? STRING("NULL")
-#define ARRAY  std::vector <Object>
+#define KEY(name) Object(OBJ,name) , (false) ? STRING("NULL")
+#define ARRAY  std::array <Object>
 #define TRUE Object(BOOL,"true");
 #define FALSE Object(BOOL,"false");
 
@@ -28,16 +29,23 @@ bool isObject = false;
 #define ERASE
 
 //Output
-#define PRINT
+#define PRINT print(T obj)
 
-typedef enum type { INT , FLOAT , STRING , BOOL , NUL }Type;
+// Function definitions
+#define SIZE_OF(name) CheckSize(name).result
+#define IS_EMPTY(name) CheckEmpty(name).result
+#define HAS_KEY(obj,key) hasKey(obj,key)
+#define TYPE_OF(name)
+
+typedef enum type { INT , FLOAT , STRING , BOOL , OBJ , ARR , NUL }Type;
+
 class Object {
 public:
     std::string value;
     Type type;
     Object(){}
     Object(Type t,std::string val):value(val),type(t){}
-    ~Object();
+    ~Object(){};
 };
 
 Type getNumberType(float x){
@@ -47,7 +55,34 @@ Type getNumberType(float x){
         return INT;
 }
 
+//Class for instance checking
 
+class CheckSize {
+public:
+    bool result;
+    CheckSize(Object obj){
+        result = false;
+    }
+    CheckSize(std::vector<Object> vec){
+        if(vec.size()>0)
+            result = true;
+        else
+            result = false;
+    }
+};
 
+class CheckEmpty {
+public:
+    bool result;
+    CheckEmpty(Object obj){
+        result = false;
+    }
+    CheckEmpty(std::vector<Object> vec){
+        if(vec.size()>0)
+            result = false;
+        else
+            result = true;
+    }
+};
 
 #endif //CS352_JSONLANG_H
