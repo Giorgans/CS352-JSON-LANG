@@ -25,10 +25,10 @@
 
 // Editing definitions
 #define SET
-#define ASSIGN =
+#define ASSIGN
 #define ERASE
 
-//Output
+// Output
 #define PRINT print(T obj)
 
 // Function definitions
@@ -43,6 +43,32 @@ class Object {
 public:
     std::string value;
     Type type;
+
+    Object operator + (Object const &obj){
+        Object result;
+        if(obj.type == STRING) {
+            std::string x1 = value, x2 = obj.value ,x;
+            x = x1 + x2;
+            return Object(STRING,x);
+        }
+        if(obj.type == INT) {
+            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
+            x = x1 + x2;
+            return Object(INT,std::to_string(x));
+        }
+        if(obj.type == FLOAT) {
+            float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
+            x = x1 + x2;
+            return Object(FLOAT,std::to_string(x));
+        }
+        if(obj.type == BOOL) {
+            assert(true);
+        }
+        if(obj.type == NUL) {
+            assert(true);
+        }
+    }
+
     Object(){}
     Object(Type t,std::string val):value(val),type(t){}
     ~Object(){};
@@ -112,5 +138,11 @@ public:
 
 };
 
+std::vector<Object> operator + (std::vector<Object> const &obj1,std::vector<Object> const &obj2){
+    std::vector<Object> result;
+    result.insert(result.end(), obj1.begin(), obj1.end());
+    result.insert(result.end(), obj2.begin(), obj2.end());
+    return result;
+}
 
 #endif //CS352_JSONLANG_H
