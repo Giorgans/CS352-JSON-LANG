@@ -34,8 +34,8 @@
 // Function definitions
 #define SIZE_OF(name) CheckSize(name).result
 #define IS_EMPTY(name) CheckEmpty(name).result
-#define HAS_KEY(obj,key) hasKey(obj,key)
-#define TYPE_OF(name)
+#define HAS_KEY(obj,key) CheckKey(obj,key).result
+#define TYPE_OF(name) CheckType(name).type
 
 typedef enum type { INT , FLOAT , STRING , BOOL , OBJ , ARR , NUL }Type;
 
@@ -49,7 +49,7 @@ public:
 };
 
 Type getNumberType(float x){
-    if (abs(x- int(x) > 0) )
+    if (abs(x-int(x) > 0) )
         return FLOAT;
     else
         return INT;
@@ -84,5 +84,33 @@ public:
             result = true;
     }
 };
+
+class CheckKey {
+public:
+    bool result;
+    CheckKey(Object obj){
+        result = false;
+    }
+    CheckKey(std::vector<Object> vec,std::string key){
+        result = false;
+        for(int i = 0 ; i<vec.size() ; i++){
+            if(vec.at(i).value == key)
+                result = true;
+        }
+    }
+};
+
+class CheckType {
+public:
+    Type type;
+    CheckType(Object obj){
+        type = obj.type;
+    }
+    CheckType(std::vector<Object> vec){
+        type = OBJ;
+    }
+
+};
+
 
 #endif //CS352_JSONLANG_H
