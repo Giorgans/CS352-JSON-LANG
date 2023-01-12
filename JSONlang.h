@@ -6,7 +6,6 @@
 #include <vector>
 #include <algorithm>
 #include <array>
-#include <map>
 #include <cassert>
 
 #define PROGRAM_BEGIN ;int main(){
@@ -30,7 +29,7 @@
 #define ERASE
 
 // Output
-#define PRINT print(T obj)
+#define PRINT ;std::cout <<
 
 // Function definitions
 #define SIZE_OF(name) CheckSize(name).result
@@ -38,166 +37,154 @@
 #define HAS_KEY(obj,key) CheckKey(obj,key).result
 #define TYPE_OF(name) CheckType(name).type
 
-typedef enum type { INT , FLOAT , STRING , BOOL , OBJ , ARR , NUL }Type;
+typedef enum type { INT , FLOAT , STRING , BOOL , OBJ  , ARR , NUL }Type;
 
 class Object {
 public:
     std::string value;
+    std::vector<Object> arr ;
     Type type;
 
+    std::vector<Object> operator [] (std::vector<Object> &obj) {
+        return obj;
+    }
+
+    Object operator [] (std::string &s) {
+
+    }
+
     Object operator + (Object const &obj){
-        Object result;
-        if(obj.type == STRING) {
+        if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT ) ) {
+            float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
+            x = x1 + x2;
+            if(obj.type == INT && type == INT)
+                return Object(INT,std::to_string(int(x)));
+            else
+                return Object(FLOAT,std::to_string(x));
+        }
+        if(obj.type == STRING && type == STRING) {
             std::string x1 = value, x2 = obj.value ,x;
             x = x1 + x2;
             return Object(STRING,x);
         }
-        if(obj.type == INT) {
-            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
-            x = x1 + x2;
-            return Object(INT,std::to_string(x));
-        }
-        if(obj.type == FLOAT) {
-            float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
-            x = x1 + x2;
-            return Object(FLOAT,std::to_string(x));
-        }
-        if(obj.type == BOOL) {
+        if(obj.type == BOOL || type == BOOL)
             assert(false && "Cannot add booleans" );
-        }
-        if(obj.type == NUL) {
+        if(obj.type == NUL || type == NUL)
             assert(false && "Cannot add null" );
-        }
+        assert(false && "Cannot add different types");
     }
 
     Object operator - (Object const &obj){
-        Object result;
-
-        if(obj.type == INT) {
-            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
-            x = x1 - x2;
-            return Object(INT,std::to_string(x));
-        }
         if(( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT )) {
             float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
             x = x1 - x2;
-            return Object(FLOAT,std::to_string(x));
+            if(obj.type == INT && type == INT)
+                return Object(INT,std::to_string(int(x)));
+            else
+                return Object(FLOAT,std::to_string(x));
         }
-        else assert(false && "Cannot subtract  non arithmetic types");
-
+        assert(false && "Cannot subtract  non arithmetic types");
     }
 
     Object operator * (Object const &obj){
-
         if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT )) {
             float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
             x = x1 * x2;
-            return Object(FLOAT,std::to_string(x));
+            if(obj.type == INT && type == INT)
+                return Object(INT,std::to_string(int(x)));
+            else
+                return Object(FLOAT,std::to_string(x));
         }
-            assert(false && "Cannot multiply non arithmetic types");
-
+        assert(false && "Cannot multiply non arithmetic types");
     }
 
     Object operator / (Object const &obj){
-
         if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT ) ) {
             float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
             x = x1 / x2;
             return Object(FLOAT,std::to_string(x));
         }
-        else  assert(false && "Cannot divide non arithmetic types");
-
+        assert(false && "Cannot divide non arithmetic types");
     }
 
     Object operator % (Object const &obj){
-
         if(obj.type == INT && type == INT) {
             int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
             x = x1 % x2;
             return Object(INT,std::to_string(x));
-        } else assert(false && "Cannot modulo other types");
+        }
+        assert(false && "Cannot modulo other types");
 
     }
 
     Object operator > (Object const &obj){
-
         if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT ) ) {
             float x1 = std::stof(value), x2 = std::stof(obj.value);
-            if (x1 > x2 ){
+            if ( x1 > x2 )
                 return TRUE;
-            } else
-                return  FALSE;
+            return FALSE;
         }
-        else assert(false && "Cannot compare different types");
+        assert(false && "Cannot compare different types");
     }
 
     Object operator >= (Object const &obj){
-
         if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT ) ) {
             float x1 = std::stof(value), x2 = std::stof(obj.value);
-            if (x1 >= x2 ){
+            if (x1 >= x2 )
                 return TRUE;
-            } else
-                return  FALSE;
+            return  FALSE;
         }
-        else assert(false && "Cannot compare different types");
+        assert(false && "Cannot compare different types");
     }
 
     Object operator < (Object const &obj){
-
         if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT ) ) {
             float x1 = std::stof(value), x2 = std::stof(obj.value);
-            if (x1 < x2 ){
+            if (x1 < x2 )
                 return TRUE;
-            } else
-                return  FALSE;
+            return  FALSE;
         }
-        else assert(false && "Cannot compare different types");
+        assert(false && "Cannot compare different types");
     }
 
     Object operator <= (Object const &obj){
-
         if( ( obj.type == FLOAT || obj.type == INT ) && ( type == INT || type == FLOAT ) ) {
             float x1 = std::stof(value), x2 = std::stof(obj.value);
-            if (x1 <= x2 ){
+            if (x1 <= x2 )
                 return TRUE;
-            } else
-                return  FALSE;
+            return  FALSE;
         }
-        else assert(false && "Cannot compare different types");
-
+        assert(false && "Cannot compare different types");
     }
 
     Object operator && (Object const &obj){
-
         if(obj.type == BOOL && type == BOOL ) {
-            if ( value == "true" && obj.value == "true" ){
+            if ( value == "true" && obj.value == "true" )
                 return TRUE;
-            } else return FALSE;
+            return FALSE;
         }
     }
 
     Object operator || (Object const &obj){
-
         if(obj.type == BOOL && type == BOOL ) {
-            if ( value == "true" || obj.value == "true" ){
+            if ( value == "true" || obj.value == "true" )
                 return TRUE;
-            } else return FALSE;
-        } else
-            assert(false && " Cannot compare different types");
+            return FALSE;
+        }
+        assert(false && " Cannot compare different types");
     }
 
     Object operator ! () {
         if (type == BOOL){
-             if ( value == "true") return FALSE;
-
-             return TRUE;
-        } else {
-            assert(false && "Cannot compare other type than boolean");
+            if ( value == "true")
+                return FALSE;
+            return TRUE;
         }
+        assert(false && "Cannot compare other type than boolean");
     }
 
     Object(){}
+    Object(Type t):type(t){}
     Object(Type t,std::string val):value(val),type(t){}
     ~Object(){};
 };
@@ -227,30 +214,28 @@ public:
 
 class CheckEmpty {
 public:
-    bool result;
+    Object result;
     CheckEmpty(Object obj){
-        result = false;
+        result = FALSE;
     }
     CheckEmpty(std::vector<Object> vec){
+        result = TRUE;
         if(vec.size()>0)
-            result = false;
-        else
-            result = true;
+            result = FALSE;
     }
 };
 
 class CheckKey {
 public:
-    bool result;
+    Object result;
     CheckKey(Object obj){
-        result = false;
+        result = FALSE;
     }
     CheckKey(std::vector<Object> vec,std::string key){
-        result = false;
-        for(int i = 0 ; i<vec.size() ; i++){
+        result = FALSE;
+        for(int i = 0 ; i<vec.size() ; i++)
             if(vec.at(i).value == key)
-                result = true;
-        }
+                result = TRUE;
     }
 };
 
@@ -263,14 +248,33 @@ public:
     CheckType(std::vector<Object> vec){
         type = OBJ;
     }
-
 };
+
+// Operator overloading
 
 std::vector<Object> operator + (std::vector<Object> const &obj1,std::vector<Object> const &obj2){
     std::vector<Object> result;
     result.insert(result.end(), obj1.begin(), obj1.end());
     result.insert(result.end(), obj2.begin(), obj2.end());
     return result;
+
+}
+
+
+void operator , (Object const &ob1,Object const &ob2){
+
+}
+
+
+std::ostream& operator << (std::ostream& os,Object const &obj) {
+    os << obj.value;
+}
+
+std::ostream& operator << (std::ostream& os,std::vector<Object> const &obj) {
+    std::string s;
+    for(int i = 0 ; i < obj.size() ; i+=2)
+        s +=  obj.at(i).value + " : " + obj.at(i+1).value + "\n";
+    os << s;
 }
 
 #endif //CS352_JSONLANG_H
