@@ -19,10 +19,9 @@
 #define NUMBER(x)    Object(getNumberType(x),std::to_string(x))
 #define OBJECT std::vector <Object>
 #define KEY(name) Object(OBJ,name) , (false) ? STRING("NULL")
-#define ARRAY  std::array <Object>
+#define ARRAY  Object(ARR)
 #define TRUE Object(BOOL,"true");
 #define FALSE Object(BOOL,"false");
-
 // Editing definitions
 #define SET
 #define ASSIGN
@@ -45,12 +44,19 @@ public:
     std::vector<Object> arr ;
     Type type;
 
-    std::vector<Object> operator [] (std::vector<Object> &obj) {
-        return obj;
+    Object operator [] (Object obj) {
+        arr.push_back(obj);
+        return *this;
     }
+    Object operator [] (std::vector<Object> obj) {
+        arr = obj;
+        return *this;
 
+    }
     Object operator [] (std::string &s) {
-
+        for(int i = 0 ; i < arr.size() ; i++)
+            if(arr.at(i).value == s)
+                return arr.at(i+1);
     }
 
     Object operator + (Object const &obj){
@@ -66,6 +72,9 @@ public:
             std::string x1 = value, x2 = obj.value ,x;
             x = x1 + x2;
             return Object(STRING,x);
+        }
+        if(obj.type == ARR && type == ARR){
+
         }
         if(obj.type == BOOL || type == BOOL)
             assert(false && "Cannot add booleans" );
@@ -257,12 +266,28 @@ std::vector<Object> operator + (std::vector<Object> const &obj1,std::vector<Obje
     result.insert(result.end(), obj1.begin(), obj1.end());
     result.insert(result.end(), obj2.begin(), obj2.end());
     return result;
-
 }
 
 
-void operator , (Object const &ob1,Object const &ob2){
+std::vector<Object> operator , (Object const &ob1,Object const &ob2){
+    std::vector<Object> result;
+    result.push_back(ob1);
+    result.push_back(ob2);
+    return result;
+}
 
+std::vector<Object> operator , (Object const &ob1,std::vector<Object> const &ob2){
+    std::vector<Object> result;
+    result.push_back(ob1);
+    result.insert(result.end(), ob2.begin(), ob2.end());
+    return result;
+}
+
+std::vector<Object> operator , (std::vector<Object> const &ob1,std::vector<Object> const &ob2){
+    std::vector<Object> result;
+    result.insert(result.end(), ob1.begin(), ob1.end());
+    result.insert(result.end(), ob2.begin(), ob2.end());
+    return result;
 }
 
 
