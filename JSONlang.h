@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <array>
 #include <map>
+#include <cassert>
 
 #define PROGRAM_BEGIN ;int main(){
 #define PROGRAM_END ;return 0;}
@@ -62,10 +63,104 @@ public:
             return Object(FLOAT,std::to_string(x));
         }
         if(obj.type == BOOL) {
-            assert(true);
+            assert(false && "Cannot add booleans" );
         }
         if(obj.type == NUL) {
-            assert(true);
+            assert(false && "Cannot add booleans" );
+        }
+    }
+
+    Object operator - (Object const &obj){
+        Object result;
+
+        if(obj.type == INT) {
+            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
+            x = x1 - x2;
+            return Object(INT,std::to_string(x));
+        }
+        if(obj.type == FLOAT) {
+            float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
+            x = x1 - x2;
+            return Object(FLOAT,std::to_string(x));
+        }
+        if(obj.type == STRING) {
+            assert(false && "String subtraction does not exist");
+        }
+        if(obj.type == BOOL) {
+            assert(false  && "Cannot subtract booleans" );
+        }
+        if(obj.type == NUL) {
+            assert(false && "Cannot subtract booleans");
+        }
+    }
+
+    Object operator * (Object const &obj){
+        Object result;
+
+        if(obj.type == INT) {
+            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
+            x = x1 * x2;
+            return Object(INT,std::to_string(x));
+        }
+        if(obj.type == FLOAT) {
+            float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
+            x = x1 * x2;
+            return Object(FLOAT,std::to_string(x));
+        }
+        if(obj.type == STRING) {
+            assert(false && "String multiplication does not exist");
+        }
+        if(obj.type == BOOL) {
+            assert(false && "Cannot multiply booleans");
+        }
+        if(obj.type == NUL) {
+            assert(false && "Cannot multiply booleans");
+        }
+    }
+
+    Object operator / (Object const &obj){
+        Object result;
+
+        if(obj.type == INT) {
+            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
+            x = x1 / x2;
+            return Object(INT,std::to_string(x));
+        }
+        if(obj.type == FLOAT) {
+            float x1 = std::stof(value), x2 = std::stof(obj.value) ,x;
+            x = x1 / x2;
+            return Object(FLOAT,std::to_string(x));
+        }
+        if(obj.type == STRING) {
+            assert(false && "String division does not exist");
+        }
+        if(obj.type == BOOL) {
+            assert(false && "Cannot divide booleans");
+        }
+        if(obj.type == NUL) {
+            assert(false && "Cannot divide booleans");
+        }
+    }
+
+    Object operator % (Object const &obj){
+        Object result;
+
+        if(obj.type == INT) {
+            int x1 = std::stoi(value), x2 = std::stoi(obj.value) ,x;
+            x = x1 % x2;
+            return Object(INT,std::to_string(x));
+        }
+        if(obj.type == FLOAT) {
+            assert(false && "Cannot modulo floats" );
+        }
+        if(obj.type == STRING) {
+            assert(false && "Cannot modulo string" );
+        }
+        if(obj.type == BOOL ) {
+            assert(false && "Cannot modulo booleans");
+        }
+        if(obj.type == NUL) {
+            assert(false && "Cannot modulo booleans");
         }
     }
 

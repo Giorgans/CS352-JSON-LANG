@@ -4,6 +4,8 @@
         JSON(flo) = NUMBER(69.665) + NUMBER(69.665)
         JSON(numsum) = NUMBER(69) + NUMBER(31)
 
+        JSON(floflo) = NUMBER(30)
+
         JSON(boolt) = TRUE
         JSON(boolf) = FALSE
         JSON(ob) = OBJECT {
@@ -16,7 +18,6 @@
         }
         JSON(OB3) = ob + ob2
         PROGRAM_BEGIN
-
     std::cout << string.value  << std::endl << num.value  << std::endl << flo.value << std::endl << numsum.value << std::endl;
     std::cout << std::endl;
     if( SIZE_OF(ob) )
@@ -69,5 +70,6 @@
     for(int i = 0; i < OB3.size() ; i++){
         std::cout << OB3.at(i).value << std::endl;
     }
+
 
 PROGRAM_END
