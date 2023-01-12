@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <array>
 #include <cassert>
 
 #define PROGRAM_BEGIN ;int main(){
@@ -17,15 +16,16 @@
 // Object definitions
 #define STRING(text) Object(STRING,text)
 #define NUMBER(x)    Object(getNumberType(x),std::to_string(x))
-#define OBJECT std::vector <Object>
+#define OBJECT std::vector<Object>
 #define KEY(name) Object(OBJ,name) , (false) ? STRING("NULL")
 #define ARRAY  Object(ARR)
-#define TRUE Object(BOOL,"true");
-#define FALSE Object(BOOL,"false");
+#define TRUE Object(BOOL,"true")
+#define FALSE Object(BOOL,"false")
+#define NULL Object(NUL)
 // Editing definitions
-#define SET
-#define ASSIGN
-#define ERASE
+#define SET ;
+#define ASSIGN =
+#define ERASE delete[]
 
 // Output
 #define PRINT ;std::cout <<
@@ -34,7 +34,8 @@
 #define SIZE_OF(name) CheckSize(name).result
 #define IS_EMPTY(name) CheckEmpty(name).result
 #define HAS_KEY(obj,key) CheckKey(obj,key).result
-#define TYPE_OF(name) CheckType(name).type
+#define TYPE_OF(name) CheckType(name).result
+
 
 typedef enum type { INT , FLOAT , STRING , BOOL , OBJ  , ARR , NUL }Type;
 
@@ -55,7 +56,7 @@ public:
     }
     Object operator [] (std::string &s) {
         for(int i = 0 ; i < arr.size() ; i++)
-            if(arr.at(i).value == s)
+            if(arr.at(i).value == s && type == OBJ)
                 return arr.at(i+1);
     }
 
@@ -74,7 +75,10 @@ public:
             return Object(STRING,x);
         }
         if(obj.type == ARR && type == ARR){
-
+            Object result;
+            result.arr.insert(result.arr.end(), arr.begin(), arr.end());
+            result.arr.insert(result.arr.end(), obj.arr.begin(), obj.arr.end());
+            return result;
         }
         if(obj.type == BOOL || type == BOOL)
             assert(false && "Cannot add booleans" );
@@ -123,7 +127,6 @@ public:
             return Object(INT,std::to_string(x));
         }
         assert(false && "Cannot modulo other types");
-
     }
 
     Object operator > (Object const &obj){
@@ -198,6 +201,7 @@ public:
     ~Object(){};
 };
 
+
 Type getNumberType(float x){
     if (abs(x-int(x) > 0) )
         return FLOAT;
@@ -250,12 +254,18 @@ public:
 
 class CheckType {
 public:
-    Type type;
+    Object result;
     CheckType(Object obj){
-        type = obj.type;
+        if(obj.type == STRING) result = STRING("STRING");
+        if(obj.type == INT) result = STRING("INT");
+        if(obj.type == FLOAT) result = STRING("FLOAT");
+        if(obj.type == BOOL) result = STRING("BOOL");
+        if(obj.type == ARR) result = STRING("ARRAY");
+        if(obj.type == NUL) result = STRING("NULL");
     }
+
     CheckType(std::vector<Object> vec){
-        type = OBJ;
+        result = STRING("OBJECT");
     }
 };
 
@@ -267,7 +277,6 @@ std::vector<Object> operator + (std::vector<Object> const &obj1,std::vector<Obje
     result.insert(result.end(), obj2.begin(), obj2.end());
     return result;
 }
-
 
 std::vector<Object> operator , (Object const &ob1,Object const &ob2){
     std::vector<Object> result;
@@ -290,16 +299,18 @@ std::vector<Object> operator , (std::vector<Object> const &ob1,std::vector<Objec
     return result;
 }
 
-
 std::ostream& operator << (std::ostream& os,Object const &obj) {
     os << obj.value;
+    return os;
 }
 
 std::ostream& operator << (std::ostream& os,std::vector<Object> const &obj) {
     std::string s;
-    for(int i = 0 ; i < obj.size() ; i+=2)
-        s +=  obj.at(i).value + " : " + obj.at(i+1).value + "\n";
-    os << s;
+    for(int i = 0 ; i < obj.size() ; i++)
+        os <<  obj.at(i).value << " \n ";
+    return os;
 }
+
+
 
 #endif //CS352_JSONLANG_H
