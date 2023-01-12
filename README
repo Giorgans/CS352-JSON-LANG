@@ -1,0 +1,6 @@
+- Members: Georgios Zervos 3384, Minos Chalkiadakis 3870
+- IDE: CLion , C++17
+- CMake
+- Συντακτικά σωστό, δεν εχουμε υλοποιήσει το overload του [] για να εχουμε access σε συγκεκριμένο key μεσα σε object.
+  Συνεπώς και το edit και print του συγκεκριμένου.
+- To τρέξαμε επιτυχώς με "g++ -std=c++17 main.cpp" στο "kerasi" της σχολής

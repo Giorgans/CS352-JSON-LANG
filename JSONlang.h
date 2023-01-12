@@ -21,7 +21,7 @@
 #define ARRAY  Object(ARR)
 #define TRUE Object(BOOL,"true")
 #define FALSE Object(BOOL,"false")
-#define NULL Object(NUL)
+
 // Editing definitions
 #define SET ;
 #define ASSIGN =
